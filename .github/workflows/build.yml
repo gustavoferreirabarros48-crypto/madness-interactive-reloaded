@@ -1,0 +1,29 @@
+
+name: Testar compilação do MIR
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Instalar .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restaurar dependências
+        run: dotnet restore src/MIR.csproj
+
+      - name: Compilar projeto
+        run: dotnet build src/MIR.csproj --configuration Release --no-restore
+        
